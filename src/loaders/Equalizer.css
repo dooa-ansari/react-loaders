@@ -1,3 +1,0 @@
-.eq { display: flex; gap: 6px; align-items: center; height: 70px; }
-.eq span { width: 8px; height: 100%; border-radius: 4px; background: linear-gradient(#f472b6, #a78bfa); animation: eq-bar .9s ease-in-out infinite; }
-@keyframes eq-bar { 0%, 100% { transform: scaleY(.2); } 50% { transform: scaleY(1); } }

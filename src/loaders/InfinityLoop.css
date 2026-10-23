@@ -1,5 +1,0 @@
-.inf { width: 150px; height: 75px; overflow: visible; }
-.inf path { fill: none; stroke-width: 6; stroke-linecap: round; }
-.inf__track { stroke: rgba(255,255,255,.08); }
-.inf__snake { stroke: #34d399; stroke-dasharray: 25 75; animation: inf-run 1.6s linear infinite; filter: drop-shadow(0 0 6px #34d399); }
-@keyframes inf-run { to { stroke-dashoffset: -100; } }

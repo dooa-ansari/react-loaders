@@ -1,0 +1,102 @@
+.hb { position: relative; display: grid; place-items: center; width: 240px; height: 220px; }
+.hb > * { grid-area: 1 / 1; }
+
+/* ---------- idle button ---------- */
+.hb__btn {
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: hb-idle 2s ease-in-out infinite;
+  transition: width .45s cubic-bezier(.7,0,.3,1), height .45s cubic-bezier(.7,0,.3,1),
+    border-radius .45s, background-color .45s, transform .25s, opacity .25s;
+}
+.hb__btn:hover { transform: translateY(-2px); }
+.hb__label { transition: opacity .15s; }
+@keyframes hb-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e55; }
+  50% { box-shadow: 0 0 0 10px #22c55e00; }
+}
+
+/* ---------- morph: button → red circle ---------- */
+.hb:not(.hb--idle) .hb__btn {
+  width: 64px; height: 64px; border-radius: 50%; background: #ef4444;
+  animation: none; cursor: default; transform: none;
+}
+.hb:not(.hb--idle) .hb__label { opacity: 0; }
+
+/* ---------- beating heart ---------- */
+.hb__heart { width: 96px; height: 96px; overflow: visible; opacity: 0; transform: scale(.5); pointer-events: none; }
+.hb--beating .hb__btn,
+.hb--bursting .hb__btn { opacity: 0; transform: scale(.4); }
+.hb--beating .hb__heart {
+  opacity: 1; transform: scale(1);
+  transition: transform .3s cubic-bezier(.3,1.6,.5,1), opacity .15s;
+  animation: hb-beat var(--beat) ease-in-out .3s var(--beats);
+}
+@keyframes hb-beat {
+  0%       { transform: scale(1);    filter: drop-shadow(0 0 0 #ef444400); }
+  15%      { transform: scale(1.25); filter: drop-shadow(0 0 18px #ef4444aa); }
+  30%      { transform: scale(1); }
+  45%      { transform: scale(1.15); filter: drop-shadow(0 0 10px #ef444477); }
+  65%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 #ef444400); }
+}
+
+.hb__shine { fill: #fff; opacity: .45; }
+
+/* soft ripple that leaves the heart on every beat */
+.hb__pulse { width: 96px; height: 96px; border-radius: 50%; background: radial-gradient(circle, #f43f5e55, transparent 70%); opacity: 0; pointer-events: none; }
+.hb--beating .hb__pulse { animation: hb-pulse var(--beat) ease-out .3s var(--beats); }
+@keyframes hb-pulse {
+  0%       { transform: scale(.8); opacity: 0; }
+  12%      { opacity: 1; }
+  60%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ECG line drawn under the heart, synced to each beat, cycling through colors */
+.hb__ecg {
+  align-self: end; width: 220px; height: 44px; opacity: 0;
+  fill: none; stroke-width: 3; overflow: visible; stroke-linejoin: round; stroke-linecap: round;
+  stroke-dasharray: 100; stroke-dashoffset: 100;
+}
+.hb--beating .hb__ecg {
+  animation: hb-ecg var(--beat) linear .3s var(--beats), hb-hue 1.8s linear infinite;
+}
+@keyframes hb-hue {
+  from { filter: drop-shadow(0 0 4px #a855f7) hue-rotate(0deg); }
+  to   { filter: drop-shadow(0 0 4px #a855f7) hue-rotate(360deg); }
+}
+@keyframes hb-ecg {
+  0%   { stroke-dashoffset: 100; opacity: 1; }
+  70%  { stroke-dashoffset: 0;   opacity: 1; }
+  100% { stroke-dashoffset: 0;   opacity: 0; }
+}
+
+/* ---------- burst ---------- */
+.hb--bursting .hb__heart {
+  opacity: 0; transform: scale(1.8);
+  transition: transform .5s cubic-bezier(.2,.7,.3,1), opacity .5s;
+}
+.hb__ring { width: 96px; height: 96px; border: 3px solid #ef4444; border-radius: 50%; opacity: 0; pointer-events: none; }
+.hb--bursting .hb__ring { animation: hb-ring .5s ease-out forwards; }
+@keyframes hb-ring {
+  from { transform: scale(.6); opacity: 1; }
+  to   { transform: scale(2.4); opacity: 0; }
+}
+
+/* particles fly out from the center on the final burst */
+.hb__particle {
+  width: 12px; height: 12px; border-radius: 50%; opacity: 0; pointer-events: none;
+  box-shadow: 0 0 10px hsl(calc(var(--a) + 300deg) 90% 60%);
+  background: hsl(calc(var(--a) + 300deg) 90% 60%);
+}
+.hb--bursting .hb__particle { animation: hb-particle .7s cubic-bezier(.15,.7,.3,1) forwards; }
+@keyframes hb-particle {
+  0%   { transform: rotate(var(--a)) translateY(0) scale(1.2); opacity: 1; }
+  100% { transform: rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(0); opacity: 0; }
+}
+
+/* ---------- result ---------- */
+.hb-result { animation: hb-result-in .5s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes hb-result-in {
+  from { opacity: 0; transform: translateY(12px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}

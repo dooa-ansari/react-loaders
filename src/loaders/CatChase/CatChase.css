@@ -1,0 +1,209 @@
+.cc { position: relative; display: grid; place-items: center; width: var(--lane); height: 220px; }
+.cc > * { grid-area: 1 / 1; }
+
+/* ---------- idle button ---------- */
+.cc__btn {
+  position: relative; z-index: 2;
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: cc-idle 2s ease-in-out infinite;
+  transition: transform .25s;
+}
+.cc__btn:hover { transform: translateY(-2px); }
+@keyframes cc-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e55; }
+  50% { box-shadow: 0 0 0 10px #22c55e00; }
+}
+/* the mouse was hiding in the button: it squashes, wobbles, and vanishes */
+.cc:not(.cc--idle) .cc__btn { animation: cc-squash .45s cubic-bezier(.5,0,.5,1) forwards; pointer-events: none; }
+@keyframes cc-squash {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.12, .7); }
+  60%  { transform: scale(.85, 1.1); opacity: 1; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+/* ---------- the lane ---------- */
+.cc__lane {
+  position: relative; width: var(--lane); height: 150px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.cc__lane::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 12px; height: 2px;
+  background: #e7d3ad; opacity: 0; transition: opacity .3s;
+}
+.cc:not(.cc--idle) .cc__lane::after { opacity: 1; }
+
+.cc__runner { position: absolute; left: 0; bottom: 12px; opacity: 0; will-change: transform; }
+.cc__runner::after { /* shadow */
+  content: ""; position: absolute; left: 15%; right: 15%; bottom: -3px; height: 6px;
+  border-radius: 50%; background: rgba(120, 80, 20, .18);
+}
+.cc__body svg { display: block; }
+.cc:not(.cc--idle) .cc__runner--mouse { opacity: 1; }
+.cc--chase .cc__runner--cat,
+.cc--pounce .cc__runner--cat { opacity: 1; z-index: 1; }
+
+.cc--popping .cc__runner--mouse .cc__body { animation: cc-pop .45s cubic-bezier(.3,1.6,.5,1) both; }
+@keyframes cc-pop {
+  from { transform: translateY(10px) scale(0); }
+  to   { transform: none; }
+}
+
+/* ---------- running: legs, bob, tails ---------- */
+.cc__leg { stroke-linecap: round; transform-box: fill-box; transform-origin: top center; }
+.cc__legs--cat .cc__leg { stroke: #f59e0b; stroke-width: 6; }
+.cc__legs--mouse .cc__leg { stroke: #71717a; stroke-width: 2.5; }
+.cc__tail { fill: none; stroke: #f59e0b; stroke-width: 6; stroke-linecap: round; transform-box: view-box; transform-origin: 22px 34px; }
+.cc__tail--mouse { stroke: #f9a8d4; stroke-width: 2; transform-origin: 14px 28px; }
+
+.cc--chase .cc__legs--cat .cc__leg--a { animation: cc-leg .28s ease-in-out infinite alternate; }
+.cc--chase .cc__legs--cat .cc__leg--b { animation: cc-leg .28s ease-in-out -.14s infinite alternate; }
+.cc--chase .cc__legs--mouse .cc__leg--a { animation: cc-leg .16s ease-in-out infinite alternate; }
+.cc--chase .cc__legs--mouse .cc__leg--b { animation: cc-leg .16s ease-in-out -.08s infinite alternate; }
+@keyframes cc-leg { from { transform: rotate(-38deg); } to { transform: rotate(38deg); } }
+
+.cc--chase .cc__runner--cat .cc__body { transform-origin: 50% 100%; animation: cc-gallop .28s ease-in-out infinite alternate; }
+@keyframes cc-gallop {
+  from { transform: translateY(0) rotate(-3deg) scale(1.05, .95); }
+  to   { transform: translateY(-7px) rotate(3deg) scale(.96, 1.04); }
+}
+.cc--chase .cc__runner--mouse .cc__body { animation: cc-bob .16s ease-in-out infinite alternate; }
+@keyframes cc-bob { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+
+.cc--chase .cc__tail { animation: cc-tail .56s ease-in-out infinite alternate; }
+.cc--chase .cc__tail--mouse { animation-duration: .32s; }
+@keyframes cc-tail { from { transform: rotate(-12deg); } to { transform: rotate(14deg); } }
+
+/* dust kicked up behind the feet */
+.cc__dust { position: absolute; left: 0; bottom: 0; width: 20px; height: 14px; }
+.cc__dust i {
+  position: absolute; left: 6px; bottom: 0; width: 10px; height: 10px; border-radius: 50%;
+  background: #e7d3ad; opacity: 0;
+}
+.cc--chase .cc__dust i { animation: cc-dust .5s ease-out infinite; }
+.cc--chase .cc__dust i:nth-child(2) { animation-delay: .17s; width: 7px; height: 7px; }
+.cc--chase .cc__dust i:nth-child(3) { animation-delay: .34s; width: 12px; height: 12px; }
+.cc__runner--mouse .cc__dust { transform: scale(.6); transform-origin: left bottom; }
+@keyframes cc-dust {
+  0%   { opacity: .9; transform: translate(0, 0) scale(.4); }
+  100% { opacity: 0; transform: translate(-26px, -10px) scale(1.4); }
+}
+
+/* panicked mouse: speed lines + flying sweat drop */
+.cc__speed { position: absolute; left: -18px; bottom: 10px; width: 20px; height: 16px; }
+.cc__speed i { position: absolute; left: 0; height: 2px; border-radius: 1px; background: #a8a29e; opacity: 0; }
+.cc__speed i:nth-child(1) { top: 0; width: 14px; }
+.cc__speed i:nth-child(2) { top: 7px; width: 20px; }
+.cc__speed i:nth-child(3) { top: 14px; width: 10px; }
+.cc--chase .cc__speed i { animation: cc-speed .35s linear infinite; }
+.cc--chase .cc__speed i:nth-child(2) { animation-delay: .12s; }
+.cc--chase .cc__speed i:nth-child(3) { animation-delay: .24s; }
+@keyframes cc-speed {
+  0%   { opacity: 0; transform: translateX(8px); }
+  30%  { opacity: .8; }
+  100% { opacity: 0; transform: translateX(-12px); }
+}
+.cc__sweat {
+  position: absolute; left: 30px; top: -4px; width: 6px; height: 8px; opacity: 0;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: #7dd3fc;
+}
+.cc--chase .cc__sweat { animation: cc-sweat .9s ease-out infinite; }
+@keyframes cc-sweat {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(-30deg) scale(.5); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-22px, 6px) rotate(-60deg) scale(1); }
+}
+
+/* startled "!" over the mouse */
+.cc__alert {
+  position: absolute; left: 50%; top: -22px; margin-left: -6px;
+  font: 900 18px system-ui, sans-serif; color: #ef4444; opacity: 0;
+}
+.cc--popping .cc__alert { animation: cc-alert .45s ease-out both; }
+.cc--pounce .cc__alert { animation: cc-alert-out .6s ease-out both; }
+@keyframes cc-alert-out {
+  0%   { opacity: 0; transform: translateY(6px) scale(.4); }
+  25%  { opacity: 1; transform: translateY(-2px) scale(1.2); }
+  80%  { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: none; }
+}
+@keyframes cc-alert {
+  0%   { opacity: 0; transform: translateY(6px) scale(.4); }
+  60%  { opacity: 1; transform: translateY(-2px) scale(1.2); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* ---------- pounce ---------- */
+.cc--pounce .cc__runner--cat .cc__body { animation: cc-pounce .55s cubic-bezier(.3,0,.4,1) forwards; }
+@keyframes cc-pounce {
+  0%   { transform: translate(0, 0) rotate(0); }
+  20%  { transform: translate(-6px, 4px) rotate(4deg); }   /* crouch */
+  55%  { transform: translate(calc(var(--leap) * .55), -52px) rotate(-14deg); }
+  100% { transform: translate(var(--leap), 6px) rotate(0); }
+}
+.cc--pounce .cc__legs--cat .cc__leg--front { transform: rotate(-45deg); transition: transform .15s .1s; }
+.cc--pounce .cc__legs--cat .cc__leg:not(.cc__leg--front) { transform: rotate(40deg); transition: transform .15s .1s; }
+.cc--pounce .cc__tail { transform: rotate(-30deg); transition: transform .3s; }
+.cc--pounce .cc__runner--cat::after { animation: cc-shadow-leap .55s cubic-bezier(.3,0,.4,1) forwards; }
+@keyframes cc-shadow-leap {
+  55%  { transform: translateX(calc(var(--leap) * .55)) scale(.5); opacity: .5; }
+  100% { transform: translateX(var(--leap)) scale(1); opacity: 1; }
+}
+.cc--pounce .cc__runner--mouse .cc__body { animation: cc-shiver .06s linear 6 alternate; }
+@keyframes cc-shiver { from { transform: translateX(-1px); } to { transform: translateX(1px); } }
+
+.cc__puff {
+  position: absolute; left: 50%; bottom: 8px; width: 120px; height: 40px; margin-left: -60px;
+  border-radius: 50%; opacity: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 60%, #e7d3ad 0 12px, transparent 13px),
+    radial-gradient(circle at 45% 40%, #efe0c2 0 16px, transparent 17px),
+    radial-gradient(circle at 72% 58%, #e7d3ad 0 13px, transparent 14px),
+    radial-gradient(circle at 88% 70%, #efe0c2 0 8px, transparent 9px);
+}
+.cc--pounce .cc__puff { animation: cc-puff .6s ease-out .5s both; }
+@keyframes cc-puff {
+  0%   { opacity: 0; transform: scale(.4); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.4) translateY(-8px); }
+}
+
+/* dizzy stars over the caught mouse */
+.cc__stars { position: absolute; z-index: 2; left: calc(50% - 22px); bottom: 92px; width: 0; height: 0; opacity: 0; }
+.cc__stars i {
+  position: absolute; left: -6px; top: -8px; font-style: normal; font-size: 14px; color: #f59e0b;
+  animation: cc-orbit 1s linear infinite;
+}
+.cc__stars i:nth-child(2) { animation-delay: -.33s; color: #fb7185; }
+.cc__stars i:nth-child(3) { animation-delay: -.66s; color: #38bdf8; }
+.cc--pounce .cc__stars { animation: cc-fade-in .25s ease-out .6s both; }
+@keyframes cc-orbit {
+  from { transform: rotate(0) translateX(16px) rotate(0); }
+  to   { transform: rotate(360deg) translateX(16px) rotate(-360deg); }
+}
+@keyframes cc-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* "Gotcha!" speech bubble */
+.cc__gotcha {
+  position: absolute; z-index: 2; left: calc(50% + 26px); bottom: 84px; padding: 4px 10px; border-radius: 12px;
+  font: 800 13px system-ui, sans-serif; color: #78350f; background: #fff;
+  box-shadow: 0 4px 12px rgba(120, 53, 15, .15); opacity: 0; transform-origin: 0 100%;
+}
+.cc__gotcha::after {
+  content: ""; position: absolute; left: 10px; bottom: -5px; width: 10px; height: 10px;
+  background: #fff; transform: rotate(45deg);
+}
+.cc--pounce .cc__gotcha { animation: cc-gotcha .4s cubic-bezier(.3,1.6,.5,1) .6s both; }
+@keyframes cc-gotcha {
+  from { opacity: 0; transform: scale(0) rotate(-10deg); }
+  to   { opacity: 1; transform: scale(1) rotate(-4deg); }
+}
+
+/* ---------- result ---------- */
+.cc-result { animation: cc-result-in .5s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes cc-result-in {
+  from { opacity: 0; transform: translateY(12px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}

@@ -1,0 +1,89 @@
+.ts { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; container-type: size; }
+.ts > * { grid-area: 1 / 1; }
+.ts__stage { position: absolute; inset: 0; pointer-events: none; } /* scenery never blocks the button */
+
+/* ---------- sky ---------- */
+.ts__dark {
+  position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(180deg, #0b1120 0%, #172033 55%, #2a3445 100%);
+  transition: opacity 1.1s ease-in-out;
+}
+.ts--gathering .ts__dark, .ts--storm .ts__dark { opacity: 1; }
+.ts--clearing .ts__dark { opacity: 0; transition-duration: 1.2s; }
+
+.ts__rainbow {
+  position: absolute; left: -10%; right: -10%; bottom: 16%; aspect-ratio: 2 / 1; opacity: 0;
+  background: radial-gradient(circle at 50% 100%, transparent 55%,
+    #ef444466 55.5%, #f9731666 58%, #facc1566 60.5%, #22c55e66 63%, #3b82f666 65.5%, #8b5cf666 68%, transparent 70.5%);
+  transition: opacity 1.4s ease-out .3s;
+}
+.ts--clearing .ts__rainbow, .ts--done .ts__rainbow { opacity: 1; }
+
+.ts__rain { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ---------- clouds roll in from both sides ---------- */
+.ts__clouds { position: absolute; left: 0; right: 0; top: 0; height: 32%; }
+/* solid cloud base so rain always comes *out of* the clouds */
+.ts__clouds::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 62%; opacity: 0;
+  background: linear-gradient(180deg, #1f2937 0%, #263040 60%, #26304000 100%);
+  transition: opacity 1s ease-out;
+}
+.ts:is(.ts--gathering, .ts--storm) .ts__clouds::before { opacity: 1; }
+.ts--clearing .ts__clouds::before { opacity: 0; transition-duration: 1.1s; }
+.ts__cloud { position: absolute; transition: transform 1.1s cubic-bezier(.22,1,.36,1), opacity 1s; opacity: 0; }
+.ts__cloud--a { width: 95%; left: -22%; top: -4%;  transform: translateX(-110%); }
+.ts__cloud--b { width: 95%; right: -26%; top: 0;    transform: translateX(110%); }
+.ts__cloud--c { width: 80%; left: 2%; top: 14%;     transform: translateX(-140%); transition-delay: .1s; }
+.ts__cloud--d { width: 76%; right: -12%; top: 20%;  transform: translateX(140%); transition-delay: .15s; }
+.ts:is(.ts--gathering, .ts--storm) .ts__cloud { transform: none; opacity: 1; }
+.ts--storm .ts__cloud--a, .ts--storm .ts__cloud--c { animation: ts-drift 6s ease-in-out infinite alternate; }
+.ts--storm .ts__cloud--b, .ts--storm .ts__cloud--d { animation: ts-drift 7s ease-in-out infinite alternate-reverse; }
+@keyframes ts-drift { from { translate: -8px 0; } to { translate: 10px 0; } }
+.ts--clearing .ts__cloud { opacity: 0; transition: transform 1.2s cubic-bezier(.5,0,.75,0), opacity 1.1s ease-in; }
+.ts--clearing .ts__cloud--a, .ts--clearing .ts__cloud--c { transform: translateX(-120%); }
+.ts--clearing .ts__cloud--b, .ts--clearing .ts__cloud--d { transform: translateX(120%); }
+
+/* ---------- wet ground ---------- */
+.ts__ground {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 16%;
+  background: linear-gradient(180deg, #3b4656 0%, #1f2937 18%, #111827 100%);
+  box-shadow: 0 -1px 0 #94a3b833;
+}
+
+/* ---------- button → grey puff that joins the clouds ---------- */
+.ts__btn {
+  position: relative; z-index: 2;
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: ts-idle 2s ease-in-out infinite;
+  transition: width .45s cubic-bezier(.7,0,.3,1), height .45s cubic-bezier(.7,0,.3,1), border-radius .45s,
+    background-color .45s, transform .9s cubic-bezier(.45,0,.2,1) .25s, opacity .6s ease-in .5s;
+}
+.ts__btn:hover { transform: translateY(-2px); }
+.ts__label { transition: opacity .15s; }
+@keyframes ts-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e55; }
+  50% { box-shadow: 0 0 0 10px #22c55e00; }
+}
+/* the button becomes a little cloud: a flat-bottomed puff + two bumps on top */
+.ts:not(.ts--idle) .ts__btn {
+  width: 96px; height: 34px; border-radius: 999px; cursor: default; animation: none;
+  background: #7b8593; box-shadow: inset 0 -6px 8px -4px #4b5563;
+  transform: translateY(-38cqh) scale(2.2); opacity: 0;
+}
+.ts__btn::before, .ts__btn::after {
+  content: ""; position: absolute; border-radius: 50%; opacity: 0;
+  background: #7b8593; transition: opacity .3s .15s;
+}
+.ts__btn::before { width: 44px; height: 44px; left: 14px; top: -22px; }
+.ts__btn::after  { width: 34px; height: 34px; right: 14px; top: -15px; }
+.ts:not(.ts--idle) .ts__btn::before, .ts:not(.ts--idle) .ts__btn::after { opacity: 1; }
+.ts:not(.ts--idle) .ts__label { opacity: 0; }
+
+/* ---------- result ---------- */
+.ts-result { position: relative; z-index: 3; animation: ts-result-in .5s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes ts-result-in {
+  from { opacity: 0; transform: translateY(12px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}

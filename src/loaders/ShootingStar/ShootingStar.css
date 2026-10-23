@@ -1,0 +1,83 @@
+.ss { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+.ss--show { touch-action: none; }
+.ss > * { grid-area: 1 / 1; }
+
+/* ---------- twinkling star field (two layers, out of sync) ---------- */
+.ss__stars { position: absolute; inset: 0; pointer-events: none; }
+.ss__stars--a {
+  background-image:
+    radial-gradient(1px 1px at 8% 12%, #fff, #fff0), radial-gradient(1.5px 1.5px at 22% 30%, #fff, #fff0),
+    radial-gradient(1px 1px at 37% 8%, #fff, #fff0), radial-gradient(1px 1px at 51% 22%, #fff, #fff0),
+    radial-gradient(1.5px 1.5px at 66% 14%, #dbeafe, #fff0), radial-gradient(1px 1px at 81% 28%, #fff, #fff0),
+    radial-gradient(1px 1px at 93% 9%, #fff, #fff0), radial-gradient(1px 1px at 14% 47%, #fff, #fff0),
+    radial-gradient(1.5px 1.5px at 44% 41%, #fff, #fff0), radial-gradient(1px 1px at 72% 49%, #fff, #fff0),
+    radial-gradient(1px 1px at 88% 62%, #fff, #fff0), radial-gradient(1px 1px at 29% 64%, #fff, #fff0);
+  animation: ss-twinkle 3.2s ease-in-out infinite alternate;
+}
+.ss__stars--b {
+  background-image:
+    radial-gradient(1px 1px at 4% 33%, #fff, #fff0), radial-gradient(1px 1px at 17% 19%, #c7d2fe, #fff0),
+    radial-gradient(1.5px 1.5px at 31% 52%, #fff, #fff0), radial-gradient(1px 1px at 47% 61%, #fff, #fff0),
+    radial-gradient(1px 1px at 58% 5%, #fff, #fff0), radial-gradient(1.5px 1.5px at 76% 37%, #fbcfe8, #fff0),
+    radial-gradient(1px 1px at 96% 44%, #fff, #fff0), radial-gradient(1px 1px at 62% 68%, #fff, #fff0),
+    radial-gradient(1px 1px at 10% 70%, #fff, #fff0), radial-gradient(1px 1px at 84% 18%, #fff, #fff0);
+  animation: ss-twinkle 4.4s ease-in-out -2s infinite alternate;
+}
+@keyframes ss-twinkle { from { opacity: .35; } to { opacity: 1; } }
+
+/* soft dark hills on the horizon */
+.ss__hills {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 22%; pointer-events: none;
+  background:
+    radial-gradient(60% 70% at 18% 100%, #07061a 98%, #07061a00),
+    radial-gradient(70% 60% at 78% 100%, #0b0a24 98%, #0b0a2400),
+    radial-gradient(90% 40% at 50% 100%, #04030f 98%, #04030f00);
+}
+
+.ss__canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* ---------- button → four-pointed star ---------- */
+.ss__btn {
+  position: relative; z-index: 2;
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: ss-idle 2s ease-in-out infinite;
+  transition: width .3s cubic-bezier(.7,0,.3,1), height .3s cubic-bezier(.7,0,.3,1), border-radius .3s,
+    background-color .3s, transform .25s;
+}
+.ss__btn:hover { transform: translateY(-2px); }
+.ss__label { transition: opacity .12s; }
+@keyframes ss-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e66, 0 0 24px #22c55e33; }
+  50% { box-shadow: 0 0 0 10px #22c55e00, 0 0 34px #22c55e55; }
+}
+.ss:not(.ss--idle) .ss__btn {
+  width: 12px; height: 12px; border-radius: 50%; background: #fff; cursor: default; animation: none;
+  box-shadow: 0 0 14px 5px #bfdbfe, 0 0 40px 12px #60a5fa88;
+}
+.ss:not(.ss--idle) .ss__label { opacity: 0; }
+.ss__btn::before, .ss__btn::after { /* the star's four points */
+  content: ""; position: absolute; left: 50%; top: 50%; width: 2px; height: 0; opacity: 0;
+  background: linear-gradient(#fff0, #fff, #fff0); transform: translate(-50%, -50%);
+  transition: height .3s cubic-bezier(.3,1.6,.5,1) .1s, opacity .2s .1s;
+}
+.ss__btn::after { transform: translate(-50%, -50%) rotate(90deg); }
+.ss:not(.ss--idle) .ss__btn::before, .ss:not(.ss--idle) .ss__btn::after { height: 44px; opacity: 1; }
+.ss--show .ss__btn { opacity: 0; transition: opacity .15s; } /* the canvas star takes over */
+
+.ss__hint {
+  position: absolute; left: 0; right: 0; bottom: 25%; margin: 0; text-align: center; pointer-events: none;
+  font: 500 13px system-ui, sans-serif; letter-spacing: .5px; color: #c7d2fe;
+  animation: ss-hint 3.8s ease-in-out .9s both;
+}
+@keyframes ss-hint {
+  0%, 100% { opacity: 0; transform: translateY(6px); }
+  15%, 80% { opacity: .85; transform: none; }
+}
+
+/* ---------- result ---------- */
+.ss-result { position: relative; z-index: 3; animation: ss-result-in .6s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes ss-result-in {
+  from { opacity: 0; transform: scale(.92); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}

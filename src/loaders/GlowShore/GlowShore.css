@@ -1,0 +1,59 @@
+.gs { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+.gs--show { touch-action: none; }
+.gs > * { grid-area: 1 / 1; }
+
+/* calm idle shore (the canvas draws the live sea on top of this) */
+.gs__calm {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, #010409 0%, #073049 47.6%, #2c2619 48.4%, #16130d 100%);
+}
+.gs__calm::after { /* softly breathing glow along the waterline */
+  content: ""; position: absolute; left: -5%; right: -5%; top: calc(48% - 3px); height: 6px; border-radius: 50%;
+  background: #67e8f9; filter: blur(4px);
+  animation: gs-breathe 3s ease-in-out infinite;
+}
+@keyframes gs-breathe {
+  0%, 100% { opacity: .25; transform: translateY(0) scaleX(1); }
+  50%      { opacity: .75; transform: translateY(5px) scaleX(1.02); }
+}
+
+.gs__canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* ---------- button → glowing droplet that falls into the sea ---------- */
+.gs__btn {
+  position: relative; z-index: 2;
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: gs-idle 2s ease-in-out infinite;
+  transition: width .3s cubic-bezier(.7,0,.3,1), height .3s cubic-bezier(.7,0,.3,1), border-radius .3s,
+    background-color .3s, transform .25s;
+}
+.gs__btn:hover { transform: translateY(-2px); }
+.gs__label { transition: opacity .12s; }
+@keyframes gs-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e66, 0 0 24px #22c55e33; }
+  50% { box-shadow: 0 0 0 10px #22c55e00, 0 0 34px #22c55e55; }
+}
+.gs:not(.gs--idle) .gs__btn {
+  width: 14px; height: 20px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; cursor: default;
+  background: #a5f3fc; box-shadow: 0 0 16px 4px #22d3ee; animation: gs-fall .42s cubic-bezier(.55,0,1,.45) .1s forwards;
+}
+.gs:not(.gs--idle) .gs__label { opacity: 0; }
+@keyframes gs-fall { to { transform: translateY(-36px) scale(.3); opacity: 0; } } /* top-down: it drops away into the sea */
+
+.gs__hint {
+  position: absolute; left: 0; right: 0; top: 9%; margin: 0; text-align: center; pointer-events: none;
+  font: 500 13px system-ui, sans-serif; letter-spacing: .5px; color: #a5f3fc;
+  animation: gs-hint 4.6s ease-in-out .8s both;
+}
+@keyframes gs-hint {
+  0%, 100% { opacity: 0; transform: translateY(-6px); }
+  15%, 80% { opacity: .85; transform: none; }
+}
+
+/* ---------- result ---------- */
+.gs-result { position: relative; z-index: 3; animation: gs-result-in .6s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes gs-result-in {
+  from { opacity: 0; transform: scale(.92); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}

@@ -1,0 +1,99 @@
+.fl { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+.fl > * { grid-area: 1 / 1; }
+
+.fl__scene { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* ---------- button → seed ---------- */
+.fl__seedwrap { position: relative; z-index: 2; }
+.fl__btn {
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: fl-idle 2s ease-in-out infinite;
+  transition: width .45s cubic-bezier(.7,0,.3,1), height .45s cubic-bezier(.7,0,.3,1),
+    border-radius .45s, background-color .45s, transform .25s, opacity .3s;
+}
+.fl__btn:hover { transform: translateY(-2px); }
+.fl__label { transition: opacity .15s; }
+@keyframes fl-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e55; }
+  50% { box-shadow: 0 0 0 10px #22c55e00; }
+}
+.fl:not(.fl--idle) .fl__btn {
+  width: 16px; height: 22px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: #8b5a2b; animation: none; cursor: default; transform: none;
+  box-shadow: inset -3px -3px 0 #6b4220;
+}
+.fl:not(.fl--idle) .fl__label { opacity: 0; }
+.fl--grow .fl__btn { opacity: 0; transform: scale(.3); transition: opacity .6s ease-out, transform .6s cubic-bezier(.22,1,.36,1); }
+
+/* ---------- ground ---------- */
+.fl__soil { fill: #8b5e34; }
+.fl__turf { fill: #4ade80; opacity: 0; transition: opacity .8s ease-out; }
+.fl:is(.fl--grow, .fl--done) .fl__turf { opacity: 1; }
+
+.fl__grass { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); }
+.fl:is(.fl--grow, .fl--done) .fl__grass { animation: fl-grass 1.1s cubic-bezier(.22,1,.36,1) both; }
+.fl:is(.fl--grow, .fl--done) .fl__grass--front { animation-delay: .15s; }
+@keyframes fl-grass { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+/* each blade starts a little later than its left neighbour → a wave of wind rolls across */
+.fl__blade {
+  transform-box: fill-box; transform-origin: 50% 100%;
+  animation: fl-blade 2.8s infinite; animation-delay: calc(var(--i) * -70ms);
+}
+@keyframes fl-blade { /* sine wave: ease out of each extreme, glide through the middle */
+  0%   { transform: rotate(0);     animation-timing-function: cubic-bezier(.33,.66,.66,1); }
+  25%  { transform: rotate(4deg);  animation-timing-function: cubic-bezier(.37,0,.63,1); }
+  75%  { transform: rotate(-3deg); animation-timing-function: cubic-bezier(.33,0,.66,.33); }
+  100% { transform: rotate(0); }
+}
+
+/* ---------- flowers ---------- */
+.fl__stem { fill: none; stroke: #16a34a; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
+.fl__leaf { fill: #22c55e; transform: scale(0); }
+.fl__head, .fl__petal, .fl__center { transform: scale(0); }
+
+.fl:is(.fl--grow, .fl--done) .fl__stem   { animation: fl-draw 1.3s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+.fl:is(.fl--grow, .fl--done) .fl__leaf   { animation: fl-leaf .9s cubic-bezier(.34,1.25,.64,1) calc(var(--d) + 500ms) both; }
+.fl:is(.fl--grow, .fl--done) .fl__leaf--late { animation-delay: calc(var(--d) + 750ms); }
+.fl:is(.fl--grow, .fl--done) .fl__head   { animation: fl-bloom 1.2s cubic-bezier(.22,1,.36,1) calc(var(--d) + 1000ms) both; }
+.fl:is(.fl--grow, .fl--done) .fl__petal  { animation: fl-petal .85s cubic-bezier(.34,1.2,.64,1) calc(var(--d) + 1050ms + var(--p) * 55ms) both; }
+.fl:is(.fl--grow, .fl--done) .fl__center { animation: fl-pop .6s cubic-bezier(.34,1.35,.64,1) calc(var(--d) + 1450ms) both; }
+/* the stem sways from its base; the head nods a beat later, like it's carried by the stem */
+.fl:is(.fl--grow, .fl--done) .fl__flower { animation: fl-sway var(--sw) calc(var(--d) + 1300ms) infinite; }
+.fl:is(.fl--grow, .fl--done) .fl__nod    { animation: fl-nod var(--sw) calc(var(--d) + 1300ms + var(--sw) * .15) infinite; }
+
+/* hidden until it starts: a round line-cap would otherwise show as a dot */
+@keyframes fl-draw  { 0% { stroke-dashoffset: 1; opacity: 0; } 1% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes fl-pop   { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes fl-leaf  { from { transform: scale(0) rotate(-40deg); } to { transform: scale(1) rotate(0); } }
+@keyframes fl-bloom { from { transform: scale(.15) rotate(-45deg); } to { transform: scale(1) rotate(0); } }
+@keyframes fl-petal { from { transform: scale(.3, 0); } to { transform: scale(1); } }
+/* sine waves that start from rest (0deg), so motion eases in instead of snapping */
+@keyframes fl-sway {
+  0%   { transform: rotate(0);       animation-timing-function: cubic-bezier(.33,.66,.66,1); }
+  25%  { transform: rotate(2deg);    animation-timing-function: cubic-bezier(.37,0,.63,1); }
+  75%  { transform: rotate(-1.6deg); animation-timing-function: cubic-bezier(.33,0,.66,.33); }
+  100% { transform: rotate(0); }
+}
+@keyframes fl-nod {
+  0%   { transform: rotate(0);     animation-timing-function: cubic-bezier(.33,.66,.66,1); }
+  25%  { transform: rotate(4deg);  animation-timing-function: cubic-bezier(.37,0,.63,1); }
+  75%  { transform: rotate(-3deg); animation-timing-function: cubic-bezier(.33,0,.66,.33); }
+  100% { transform: rotate(0); }
+}
+
+/* ---------- sky life ---------- */
+.fl__cloud { animation: fl-drift 9s ease-in-out infinite alternate; }
+.fl__cloud--b { animation-duration: 12s; animation-direction: alternate-reverse; }
+@keyframes fl-drift { from { transform: translateX(-14px); } to { transform: translateX(18px); } }
+
+.fl__butterfly { opacity: 0; } /* flight path is animated from JS (smooth sine wave) */
+.fl__wing { animation: fl-flap .16s ease-in-out infinite alternate; }
+@keyframes fl-flap { from { transform: scaleX(1); } to { transform: scaleX(.25); } }
+
+/* ---------- result ---------- */
+.fl-result { position: relative; z-index: 3; animation: fl-result-in .5s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes fl-result-in {
+  from { opacity: 0; transform: translateY(12px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}

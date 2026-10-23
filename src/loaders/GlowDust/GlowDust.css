@@ -1,0 +1,56 @@
+.gd { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+.gd--show { touch-action: none; }
+.gd > * { grid-area: 1 / 1; }
+
+.gd__canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* a few slow, soft motes so the idle card already feels alive */
+.gd__motes { position: absolute; inset: 0; pointer-events: none; transition: opacity .6s; }
+.gd__motes i {
+  position: absolute; width: 4px; height: 4px; border-radius: 50%;
+  background: hsl(calc(var(--i) * 26deg) 95% 70%);
+  box-shadow: 0 0 10px 2px hsl(calc(var(--i) * 26deg) 95% 60%);
+  animation: gd-float calc(5s + var(--i) * .4s) ease-in-out calc(var(--i) * -.7s) infinite alternate;
+}
+@keyframes gd-float {
+  from { transform: translate(-8px, 10px); opacity: .25; }
+  to   { transform: translate(10px, -14px); opacity: .9; }
+}
+.gd:not(.gd--idle) .gd__motes { opacity: 0; }
+
+/* ---------- button: dissolves into the dust ---------- */
+.gd__btn {
+  position: relative; z-index: 2;
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: gd-idle 2s ease-in-out infinite;
+  transition: transform .25s;
+}
+.gd__btn:hover { transform: translateY(-2px); }
+@keyframes gd-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e66, 0 0 24px #22c55e33; }
+  50% { box-shadow: 0 0 0 10px #22c55e00, 0 0 34px #22c55e55; }
+}
+.gd--show .gd__btn {
+  pointer-events: none; animation: gd-dissolve .45s ease-out forwards;
+}
+@keyframes gd-dissolve {
+  to { opacity: 0; filter: blur(10px); transform: scale(1.15); }
+}
+
+.gd__hint {
+  position: absolute; left: 0; right: 0; bottom: 7%; margin: 0; text-align: center; pointer-events: none;
+  font: 500 13px system-ui, sans-serif; letter-spacing: .5px; color: #c4b5fd;
+  animation: gd-hint 4.4s ease-in-out .9s both;
+}
+@keyframes gd-hint {
+  0%, 100% { opacity: 0; transform: translateY(6px); }
+  15%, 80% { opacity: .8; transform: none; }
+}
+
+/* ---------- result ---------- */
+.gd-result { position: relative; z-index: 3; animation: gd-result-in .6s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes gd-result-in {
+  from { opacity: 0; transform: scale(.9); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}

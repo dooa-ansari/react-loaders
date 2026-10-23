@@ -1,0 +1,44 @@
+.fw { position: relative; display: grid; place-items: center; width: 300px; height: 380px; }
+.fw > .fw__btn { grid-area: 1 / 1; }
+
+/* ---------- idle button ---------- */
+.fw__btn {
+  position: relative; z-index: 1;
+  width: 180px; height: 56px; border: 0; border-radius: 12px; cursor: pointer;
+  font: 600 18px system-ui, sans-serif; color: #fff; background: #22c55e;
+  animation: fw-idle 2s ease-in-out infinite;
+  transition: width .4s cubic-bezier(.7,0,.3,1), height .4s cubic-bezier(.7,0,.3,1),
+    border-radius .4s, background-color .4s, transform .25s, opacity .25s;
+}
+.fw__btn:hover { transform: translateY(-2px); }
+.fw__label { transition: opacity .15s; }
+@keyframes fw-idle {
+  0%, 100% { box-shadow: 0 0 0 0 #22c55e55; }
+  50% { box-shadow: 0 0 0 10px #22c55e00; }
+}
+
+/* ---------- charging: button → glowing spark ---------- */
+.fw:not(.fw--idle) .fw__btn {
+  width: 16px; height: 16px; border-radius: 50%; background: #fbbf24;
+  cursor: default; transform: none; animation: fw-charge .25s ease-in-out infinite alternate;
+}
+.fw:not(.fw--idle) .fw__label { opacity: 0; }
+@keyframes fw-charge {
+  from { box-shadow: 0 0 6px 2px #fbbf24; }
+  to   { box-shadow: 0 0 16px 6px #f97316; }
+}
+.fw--show .fw__btn { opacity: 0; transform: scale(0); transition-delay: .2s; }
+
+/* ---------- the show (drawn on canvas) ---------- */
+/* Canvas is larger than the stage; its launch point (69% down) sits on the button's center. */
+.fw__sky {
+  position: absolute; left: 50%; top: 50%; width: 460px; height: 480px;
+  transform: translate(-50%, -331px); pointer-events: none;
+}
+
+/* ---------- result ---------- */
+.fw-result { animation: fw-result-in .5s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes fw-result-in {
+  from { opacity: 0; transform: translateY(12px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
