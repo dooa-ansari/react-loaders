@@ -14,9 +14,13 @@ const Leg = ({ x, y, d, far }) => (
   </g>
 )
 
-function Giraffe({ anchorRef }) {
+// The sun lands on this point of the giraffe drawing (viewBox units).
+const HEAD = { x: 184, y: 14 }
+const VIEWBOX = { x: 0, y: -12, w: 206, h: 232 }
+
+function Giraffe({ svgRef }) {
   return (
-    <svg className="sv__giraffe" viewBox="0 -12 206 232" aria-hidden="true">
+    <svg ref={svgRef} className="sv__giraffe" viewBox="0 -12 206 232" aria-hidden="true">
       {/* far-side legs (slightly lighter for depth) */}
       <Leg x={78} y={118} d={BACK_LEG} far />
       <Leg x={142} y={118} d={FRONT_LEG} far />
@@ -34,7 +38,6 @@ function Giraffe({ anchorRef }) {
         <path className="sv__horn" d="M175 4L173-6M181 3L181-7" />
         <circle className="sv__fill" cx="173" cy="-6.5" r="2.2" />
         <circle className="sv__fill" cx="181" cy="-7.5" r="2.2" />
-        <circle ref={anchorRef} cx="184" cy="14" r="0" /> {/* where the sun should land */}
       </g>
 
       {/* near-side legs */}
@@ -81,7 +84,7 @@ export default function SavannaSunset({ label = 'Start', setMs = 4200, onComplet
   const [phase, setPhase] = useState('idle') // idle → morphing → setting → aligned → done
   const rootRef = useRef(null)
   const sunRef = useRef(null)
-  const anchorRef = useRef(null)
+  const giraffeRef = useRef(null)
 
   useEffect(() => {
     if (phase === 'morphing') {
@@ -92,7 +95,13 @@ export default function SavannaSunset({ label = 'Start', setMs = 4200, onComplet
     if (phase === 'setting') {
       // Measure where the sun is and where the giraffe's head is, then fly along an arc.
       const sun = sunRef.current.getBoundingClientRect()
-      const head = anchorRef.current.getBoundingClientRect()
+      // Measure the whole <svg> box (reliable in every browser; Safari mis-reports zero-size SVG shapes)
+      // and map the head point through the viewBox.
+      const g = giraffeRef.current.getBoundingClientRect()
+      const head = {
+        left: g.left + ((HEAD.x - VIEWBOX.x) / VIEWBOX.w) * g.width,
+        top: g.top + ((HEAD.y - VIEWBOX.y) / VIEWBOX.h) * g.height,
+      }
       const dx = head.left - (sun.left + sun.width / 2)
       const dy = head.top - (sun.top + sun.height / 2)
       const lift = rootRef.current.clientHeight * 0.32
@@ -130,7 +139,7 @@ export default function SavannaSunset({ label = 'Start', setMs = 4200, onComplet
         </div>
       )}
 
-      <div className="sv__stand"><Giraffe anchorRef={anchorRef} /></div>
+      <div className="sv__stand"><Giraffe svgRef={giraffeRef} /></div>
 
       <div className="sv__ground">
         <Acacia />

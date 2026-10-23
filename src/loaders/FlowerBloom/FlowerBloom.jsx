@@ -126,7 +126,7 @@ const Cloud = ({ x, y, s, cls }) => (
 export default function FlowerBloom({ label = 'Start', onComplete, children }) {
   const [phase, setPhase] = useState('idle') // idle → seed → drop → grow → done
   const seedRef = useRef(null)
-  const groundRef = useRef(null)
+  const sceneRef = useRef(null)
   const flyRef = useRef(null)
 
   useEffect(() => {
@@ -137,7 +137,12 @@ export default function FlowerBloom({ label = 'Start', onComplete, children }) {
     if (phase === 'drop') {
       // Fall exactly onto the soil line, wherever it is on this card size.
       const seed = seedRef.current.getBoundingClientRect()
-      const dy = groundRef.current.getBoundingClientRect().top - seed.bottom + 4
+      // The scene is a 420×600 viewBox drawn with "xMidYMax slice": scaled to cover, bottom-aligned.
+      // Mapping it ourselves is reliable everywhere (Safari mis-reports zero-size SVG shapes).
+      const sc = sceneRef.current.getBoundingClientRect()
+      const scale = Math.max(sc.width / 420, sc.height / 600)
+      const groundTop = sc.top + (sc.height - 600 * scale) + GROUND * scale
+      const dy = groundTop - seed.bottom + 4
       const anim = seedRef.current.animate(
         [
           { transform: 'translateY(0)', easing: 'cubic-bezier(.55,0,1,.45)' }, // gravity
@@ -166,13 +171,12 @@ export default function FlowerBloom({ label = 'Start', onComplete, children }) {
 
   return (
     <div className={`fl fl--${phase}`}>
-      <svg className="fl__scene" viewBox="0 0 420 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <svg ref={sceneRef} className="fl__scene" viewBox="0 0 420 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
         <Cloud x={40} y={70} s={1} cls="fl__cloud--a" />
         <Cloud x={280} y={130} s={0.75} cls="fl__cloud--b" />
 
         <rect className="fl__soil" x="0" y={GROUND} width="420" height={600 - GROUND} />
         <rect className="fl__turf" x="0" y={GROUND} width="420" height={600 - GROUND} />
-        <circle ref={groundRef} cx="210" cy={GROUND} r="0" />
 
         <Grass items={BACK_GRASS} />
         {FLOWERS.map((f, i) => <Flower key={f.x} f={f} i={i} />)}
