@@ -1,5 +1,15 @@
 # ✨ React Loaders
 
+<p>
+  <a href="https://github.com/dooa-ansari/react-loaders/stargazers"><img src="https://img.shields.io/github/stars/dooa-ansari/react-loaders?style=flat-square&logo=github&color=facc15" alt="GitHub stars"></a>
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React 18">
+  <img src="https://img.shields.io/badge/dependencies-0-22c55e?style=flat-square" alt="Zero dependencies">
+  <img src="https://img.shields.io/badge/loaders-10-a855f7?style=flat-square" alt="10 loaders">
+  <img src="https://img.shields.io/badge/made%20with-CSS%20%2B%20Canvas-f472b6?style=flat-square" alt="Made with CSS and Canvas">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/dooa-ansari/react-loaders?style=flat-square&color=3b82f6" alt="MIT license"></a>
+  <a href="https://github.com/dooa-ansari/react-loaders/pulls"><img src="https://img.shields.io/badge/PRs-welcome-14b8a6?style=flat-square" alt="PRs welcome"></a>
+</p>
+
 **10 loading animations where the button *becomes* the animation.**
 Click it and it turns into glowing dust, a shooting star, a beating heart, a thunderstorm… then shows your result.
 
