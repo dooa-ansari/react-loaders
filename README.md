@@ -7,18 +7,66 @@ Zero dependencies. Just React + CSS (and a tiny canvas engine for the glowing on
 
 ## 🎬 The loaders
 
-| # | Loader | What happens |
-|---|--------|--------------|
-| 01 | **Glow Dust** | The button dissolves into ~1,100 rainbow particles that swirl in the wind, **follow your cursor/finger**, then gather into a glowing ✓ |
-| 02 | **Glow Shore** | A droplet falls into a bioluminescent sea; glowing waves break on the beach, **touch the water** to make ripples, then a wave flushes the screen |
-| 03 | **Shooting Star** | The button becomes a star and launches; a meteor shower follows, **swipe to fling your own stars**, then a ✓ constellation draws itself |
-| 04 | **Heartbeat** | The button morphs into a heart that beats lub-dub with a color-cycling ECG line, then bursts into particles |
-| 05 | **Fireworks** | Rockets launch from the button: peonies, rings, willows, crackles and a rainbow finale, with real physics |
-| 06 | **Cat & Mouse** | A mouse pops out of the button and a cat chases it for a few laps… then pounces. *Gotcha!* |
-| 07 | **Savanna Sunset** | The button becomes the sun and sets right behind a giraffe's head |
-| 08 | **Flower Bloom** | The button becomes a seed; grass grows and seven flowers bloom while a butterfly flies by |
-| 09 | **Thunderstorm** | The button floats up into storm clouds: rain, lightning, thunder shake, then a rainbow |
-| 10 | **Coin Rush** | A retro platformer: a pixel robot bonks a `{ }` block and runs through a level collecting coins |
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/gifs/glow-dust.gif" width="220" alt="Glow Dust loader"><br>
+      <b>01 · Glow Dust</b><br>
+      <sub>Dissolves into rainbow dust that <b>follows your finger</b>, then gathers into a ✓</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/gifs/glow-shore.gif" width="220" alt="Glow Shore loader"><br>
+      <b>02 · Glow Shore</b><br>
+      <sub>Bioluminescent waves; <b>touch the water</b> to make it glow</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/gifs/shooting-star.gif" width="220" alt="Shooting Star loader"><br>
+      <b>03 · Shooting Star</b><br>
+      <sub>A meteor shower; <b>swipe to fling stars</b>, then a ✓ constellation</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/gifs/heartbeat.gif" width="220" alt="Heartbeat loader"><br>
+      <b>04 · Heartbeat</b><br>
+      <sub>Morphs into a beating heart with a color-cycling ECG</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/gifs/fireworks.gif" width="220" alt="Fireworks loader"><br>
+      <b>05 · Fireworks</b><br>
+      <sub>Rockets, peonies, willows and a rainbow finale, with real physics</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/gifs/cat-mouse.gif" width="220" alt="Cat &amp; Mouse loader"><br>
+      <b>06 · Cat &amp; Mouse</b><br>
+      <sub>A mouse escapes the button… the cat pounces. <i>Gotcha!</i></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/gifs/savanna-sunset.gif" width="220" alt="Savanna Sunset loader"><br>
+      <b>07 · Savanna Sunset</b><br>
+      <sub>The button becomes the sun and sets behind a giraffe</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/gifs/flower-bloom.gif" width="220" alt="Flower Bloom loader"><br>
+      <b>08 · Flower Bloom</b><br>
+      <sub>A seed drops, grass grows and seven flowers bloom</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/gifs/thunderstorm.gif" width="220" alt="Thunderstorm loader"><br>
+      <b>09 · Thunderstorm</b><br>
+      <sub>Rain, lightning and thunder… then a rainbow</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/gifs/coin-rush.gif" width="220" alt="Coin Rush loader"><br>
+      <b>10 · Coin Rush</b><br>
+      <sub>A pixel robot bonks a <code>{ }</code> block and collects coins</sub>
+    </td>
+  </tr>
+</table>
 
 ## 🚀 Run the gallery
 
