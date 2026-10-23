@@ -1,0 +1,5 @@
+.bdots { display: flex; gap: 12px; align-items: flex-end; height: 60px; }
+.bdots span { width: 18px; height: 18px; border-radius: 50%; background: #a78bfa; animation: bdots-bounce .6s cubic-bezier(.5,0,.5,1) infinite alternate; }
+.bdots span:nth-child(2) { background: #f472b6; animation-delay: .15s; }
+.bdots span:nth-child(3) { background: #60a5fa; animation-delay: .3s; }
+@keyframes bdots-bounce { from { transform: translateY(0) scale(1.2, .8); } to { transform: translateY(-40px) scale(.9, 1.1); } }

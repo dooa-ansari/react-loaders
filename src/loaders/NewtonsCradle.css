@@ -1,0 +1,8 @@
+.cradle { display: flex; height: 90px; }
+.cradle span { position: relative; width: 20px; height: 90px; transform-origin: top center; }
+.cradle span::before { content: ""; position: absolute; left: 9px; top: 0; width: 2px; height: 70px; background: #6b7280; }
+.cradle span::after { content: ""; position: absolute; left: 0; bottom: 0; width: 20px; height: 20px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff, #9ca3af 60%, #4b5563); }
+.cradle span:first-child { animation: cradle-left 1s ease-in infinite; }
+.cradle span:last-child { animation: cradle-right 1s ease-out infinite; }
+@keyframes cradle-left  { 0%, 50% { transform: rotate(0); } 25% { transform: rotate(35deg); } }
+@keyframes cradle-right { 0%, 50%, 100% { transform: rotate(0); } 75% { transform: rotate(-35deg); } }

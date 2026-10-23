@@ -1,0 +1,5 @@
+.liquid { position: relative; width: 100px; height: 100px; border-radius: 50%; border: 3px solid #60a5fa; overflow: hidden; box-shadow: 0 0 20px #60a5fa50; }
+.liquid__wave { position: absolute; left: -50%; width: 200%; height: 200%; border-radius: 42%; background: #3b82f6; animation: liquid-rise 3s ease-in-out infinite alternate, liquid-spin 4s linear infinite; }
+.liquid__wave--back { background: #60a5fa80; border-radius: 38%; animation-duration: 3s, 6s; }
+@keyframes liquid-spin { to { rotate: 360deg; } }
+@keyframes liquid-rise { 0% { top: 100%; } 100% { top: -40%; } }

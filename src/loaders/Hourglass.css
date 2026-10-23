@@ -1,0 +1,12 @@
+.hglass { position: relative; width: 50px; height: 80px; animation: hglass-flip 2.4s ease-in-out infinite; }
+.hglass::before, .hglass::after { content: ""; position: absolute; left: -6px; right: -6px; height: 5px; border-radius: 3px; background: #d97706; }
+.hglass::before { top: -5px; } .hglass::after { bottom: -5px; }
+.hglass__top, .hglass__bot { position: absolute; left: 0; width: 50px; height: 40px; overflow: hidden; border: 2px solid #e5e7eb; }
+.hglass__top { top: 0; border-radius: 4px 4px 50% 50% / 4px 4px 100% 100%; }
+.hglass__bot { bottom: 0; border-radius: 50% 50% 4px 4px / 100% 100% 4px 4px; }
+.hglass__top::after, .hglass__bot::after { content: ""; position: absolute; left: 0; right: 0; background: #fbbf24; }
+.hglass__top::after { bottom: 0; animation: hglass-drain 2.4s linear infinite; }
+.hglass__bot::after { bottom: 0; animation: hglass-fill 2.4s linear infinite; }
+@keyframes hglass-drain { 0% { height: 100%; } 75%, 100% { height: 0; } }
+@keyframes hglass-fill  { 0% { height: 0; } 75%, 100% { height: 100%; } }
+@keyframes hglass-flip  { 0%, 75% { transform: rotate(0); } 100% { transform: rotate(180deg); } }

@@ -1,0 +1,8 @@
+.orbit { position: relative; width: 120px; height: 120px; }
+.orbit__sun { position: absolute; inset: 44px; border-radius: 50%; background: radial-gradient(circle, #fde68a, #f59e0b); box-shadow: 0 0 24px #f59e0b; }
+.orbit__ring { position: absolute; border: 1px dashed rgba(255,255,255,.15); border-radius: 50%; animation: orbit-spin linear infinite; }
+.orbit__ring i { position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; }
+.orbit__ring--1 { inset: 30px; animation-duration: 1.2s; } .orbit__ring--1 i { background: #60a5fa; box-shadow: 0 0 10px #60a5fa; }
+.orbit__ring--2 { inset: 14px; animation-duration: 2s; }   .orbit__ring--2 i { background: #f472b6; box-shadow: 0 0 10px #f472b6; }
+.orbit__ring--3 { inset: 0; animation-duration: 3.2s; }    .orbit__ring--3 i { background: #34d399; box-shadow: 0 0 10px #34d399; }
+@keyframes orbit-spin { to { transform: rotate(360deg); } }

@@ -1,0 +1,6 @@
+.glitch { position: relative; font: 900 34px/1 ui-monospace, monospace; color: #fff; letter-spacing: 3px; }
+.glitch::before, .glitch::after { content: attr(data-text); position: absolute; inset: 0; }
+.glitch::before { color: #f0f; animation: glitch-a 1.2s steps(2) infinite; }
+.glitch::after  { color: #0ff; animation: glitch-b 1s steps(2) infinite; }
+@keyframes glitch-a { 0% { clip-path: inset(10% 0 60% 0); transform: translate(-3px,-2px); } 25% { clip-path: inset(70% 0 5% 0); transform: translate(3px,1px); } 50% { clip-path: inset(30% 0 40% 0); transform: translate(-2px,2px); } 75% { clip-path: inset(85% 0 0 0); transform: translate(2px,-1px); } 100% { clip-path: inset(0 0 90% 0); transform: translate(0); } }
+@keyframes glitch-b { 0% { clip-path: inset(60% 0 10% 0); transform: translate(3px,2px); } 25% { clip-path: inset(5% 0 80% 0); transform: translate(-3px,-1px); } 50% { clip-path: inset(45% 0 30% 0); transform: translate(2px,-2px); } 75% { clip-path: inset(0 0 70% 0); transform: translate(-2px,1px); } 100% { clip-path: inset(90% 0 0 0); transform: translate(0); } }
